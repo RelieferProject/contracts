@@ -8,11 +8,11 @@ import "hardhat-log-remover";
 import "@nomiclabs/hardhat-web3";
 
 module.exports = {
-  defaultNetwork: "relieferchain",
+  defaultNetwork: "hardhat",
 
   networks: {
     relieferchain: {
-      url: "http://127.0.0.1:7545/",
+      url: "http://127.0.0.1:8545/",
       accounts: [
         process.env.LOCAL_PRIVATE_KEY_1,
         process.env.LOCAL_PRIVATE_KEY_2,

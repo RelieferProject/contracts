@@ -2,25 +2,26 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "./RelieferCampaign.sol";
 import "./RelieferToken.sol";
 import "./RelieferValidate.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 
 contract RelieferFactory is Ownable {
   RelieferToken public token;
-  RelieferValidate public validate;
+  RelieferValidate public validator;
   address[] public campaigns;
   mapping(address => bool) public isCampaign;
 
   constructor (address _token, address _validate) {
     token = RelieferToken(_token);
-    validate = RelieferValidate(_validate);
+    validator = RelieferValidate(_validate);
   }
 
-  function createCampaign(uint256 _startTime, uint256 _endTime, uint256 _durationToEarn, uint256 _rewardTokenAmount, address _rewardToken) external onlyOwner {
-    RelieferCampaign campaign = new RelieferCampaign(_startTime, _endTime, _durationToEarn, _rewardTokenAmount, _rewardToken);
+  function createCampaign(uint256 _startTime, uint256 _endTime, uint256 _durationToEarn, uint256 _rewardTokenAmount,uint256 _maxUser) external {
+    require(validator.campaigner(msg.sender), "not campaigner");
+    RelieferCampaign campaign = new RelieferCampaign(msg.sender,_startTime, _endTime,_durationToEarn,_rewardTokenAmount,_maxUser, token, validator);
     campaigns.push(address(campaign));
     isCampaign[address(campaign)] = true;
   }
@@ -29,11 +30,15 @@ contract RelieferFactory is Ownable {
     return campaigns;
   }
 
-  function setToken(address _token) external onlyOwner {
-    token = RelieferToken(_token);
+  function addValidator(address _validate) external onlyOwner {
+    validator.addValidator(_validate);
   }
 
-  function setValidate(address _validate) external onlyOwner {
-    validate = RelieferValidate(_validate);
+  function isValidator(address _validate) external view returns (bool) {
+    return validator.isValidator(_validate);
+  }
+
+  function addCampaigner(address _campaigner) external onlyOwner {
+    validator.grantCampainer(_campaigner);
   }
 }
