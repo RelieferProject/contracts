@@ -26,24 +26,32 @@ module.exports = {
       blockGasLimit: 0x1fffffffffffff,
       allowUnlimitedContractSize: true,
       timeout: 1800000,
-      accounts: [
-        {
-          privateKey: process.env.LOCAL_PRIVATE_KEY_1,
-          balance: "10000000000000000000000",
-        },
-        {
-          privateKey: process.env.LOCAL_PRIVATE_KEY_2,
-          balance: "10000000000000000000000",
-        },
-        {
-          privateKey: process.env.LOCAL_PRIVATE_KEY_3,
-          balance: "10000000000000000000000",
-        },
-        {
-          privateKey: process.env.LOCAL_PRIVATE_KEY_4,
-          balance: "10000000000000000000000",
-        },
-      ],
+      // accounts: [
+      //   {
+      //     privateKey: process.env.LOCAL_PRIVATE_KEY_1,
+      //     balance: "10000000000000000000000",
+      //   },
+      //   {
+      //     privateKey: process.env.LOCAL_PRIVATE_KEY_2,
+      //     balance: "10000000000000000000000",
+      //   },
+      //   {
+      //     privateKey: process.env.LOCAL_PRIVATE_KEY_3,
+      //     balance: "10000000000000000000000",
+      //   },
+      //   {
+      //     privateKey: process.env.LOCAL_PRIVATE_KEY_4,
+      //     balance: "10000000000000000000000",
+      //   },
+      // ],
+      accounts: {
+        mnemonic: "test test test test test test test test test test test junk",
+        path: "m/44'/60'/0'/0",
+        initialIndex: 0,
+        count: 20,
+        passphrase: "",
+        balance: "10000000000000000000000",
+      },
     },
     testnet: {
       url: "https://data-seed-prebsc-1-s1.binance.org:8545/",

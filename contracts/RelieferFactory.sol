@@ -19,11 +19,13 @@ contract RelieferFactory is Ownable {
     validator = RelieferValidate(_validate);
   }
 
-  function createCampaign(uint256 _startTime, uint256 _endTime, uint256 _durationToEarn, uint256 _rewardTokenAmount,uint256 _maxUser) external {
+
+  function createCampaign(uint256 _startTime, uint256 _endTime, uint256 _durationToEarn, uint256 _rewardTokenAmount,uint256 _maxUser) external returns (address) {
     require(validator.campaigner(msg.sender), "not campaigner");
     RelieferCampaign campaign = new RelieferCampaign(msg.sender,_startTime, _endTime,_durationToEarn,_rewardTokenAmount,_maxUser, token, validator);
     campaigns.push(address(campaign));
     isCampaign[address(campaign)] = true;
+    return address(campaign);
   }
 
   function getCampaigns() external view returns (address[] memory) {

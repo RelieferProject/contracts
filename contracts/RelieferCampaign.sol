@@ -2,7 +2,6 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./RelieferValidate.sol";
 
@@ -15,10 +14,9 @@ enum USER_STATUS_ENUM {NOT_JOIN,JOIN,STARTED_CAMPAIGN, END_CAMPAIGN,CLAIM,FALSE_
 
 
 contract RelieferCampaign is Ownable {
-  RelieferToken public token;
   RelieferValidate public validator;
 
-  constructor (address _owner,uint256 _startTime, uint256 _endTime, uint256 _durationToEarn, uint256 _rewardTokenAmount,uint256 _maxUser, IERC20 _rewardToken, RelieferValidate _validator) {
+  constructor (address _owner,uint256 _startTime, uint256 _endTime, uint256 _durationToEarn, uint256 _rewardTokenAmount,uint256 _maxUser, RelieferToken _rewardToken, RelieferValidate _validator) {
     startTime = _startTime;
     endTime = _endTime;
     durationToEarn = _durationToEarn;
@@ -36,7 +34,7 @@ contract RelieferCampaign is Ownable {
     STATUS_ENUM status;
     uint256 totalTokenAmount;
     uint256 rewardTokenAmount;
-    IERC20 rewardToken;
+    RelieferToken rewardToken;
     uint256 maxUser;
     address[] users;
   }
@@ -45,11 +43,11 @@ contract RelieferCampaign is Ownable {
   uint256 endTime;
   uint256 durationToEarn;
 
-  STATUS_ENUM status = STATUS_ENUM.NOTSTARTED;
+  STATUS_ENUM public status = STATUS_ENUM.NOTSTARTED;
 
   uint256 public totalTokenAmount = 0;
   uint256 rewardTokenAmount;
-  IERC20 rewardToken;
+  RelieferToken rewardToken;
   uint256 public maxUser;
 
   address[] users;
@@ -77,7 +75,11 @@ contract RelieferCampaign is Ownable {
   }
 
   function setRewardToken(address _rewardToken) external onlyOwner {
-    rewardToken = IERC20(_rewardToken);
+    rewardToken = RelieferToken(_rewardToken);
+  }
+
+  function setMaxUser(uint256 _maxUser) external onlyOwner {
+    maxUser = _maxUser;
   }
 
   function startJoinCampaign() external onlyOwner {
@@ -115,7 +117,7 @@ contract RelieferCampaign is Ownable {
     status = STATUS_ENUM.SUCCESS;
   }
 
-  function sendRewardToken() external payable onlyOwner {
+  function mintReward() external payable onlyOwner {
     require(status == STATUS_ENUM.SUCCESS, "not success");
     rewardToken.transfer(msg.sender, totalTokenAmount);
     status = STATUS_ENUM.CLAIM;
@@ -138,7 +140,7 @@ contract RelieferCampaign is Ownable {
 
   function user_endCampaign() external onlyValidate {
     require(status == STATUS_ENUM.END_CAMPAIGN, "not end campaign time");
-    require(userStatus[msg.sender] == USER_STATUS_ENUM.JOIN, "not join campaign");
+    require(userStatus[msg.sender] == USER_STATUS_ENUM.STARTED_CAMPAIGN, "not start campaign");
     userStatus[msg.sender] = USER_STATUS_ENUM.END_CAMPAIGN;
     userEndTime[msg.sender] = block.timestamp;
   }
@@ -200,7 +202,7 @@ contract RelieferCampaign is Ownable {
   }
 
   modifier onlyValidate() {
-    require(validator.isValidator(msg.sender), "not verify");
+    require(validator.isUserValid(msg.sender), "not verify");
     _;
   }
 }
@@ -236,7 +238,7 @@ interface IRelieferCampaign {
     STATUS_ENUM status;
     uint256 totalTokenAmount;
     uint256 rewardTokenAmount;
-    IERC20 rewardToken;
+    RelieferToken rewardToken;
     address[] users;
     uint256 maxUser;
   }
