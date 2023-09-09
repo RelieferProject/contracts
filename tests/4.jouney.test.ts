@@ -4,7 +4,7 @@ import { Artifact } from "hardhat/types";
 import { deployContract } from "../shared/Contracts";
 import { Contract } from "web3-eth-contract";
 
-describe("4. ", function () {
+describe("4. Campaign Test", function () {
   let accounts: string[];
   let deployer: string;
   let validator: string;
@@ -44,9 +44,19 @@ describe("4. ", function () {
 
     // add minter to factory
     // await RelieferToken.methods.setAllowMint(RelieferFactory.options.address,true).send({ from: deployer });
+    await RelieferToken.methods.setAllowMint(deployer,true).send({ from: deployer });
+
+
+    const getMinter = await RelieferToken.methods.getMinters().call();
+    console.log({ getMinter });
 
     // mint token
-    // await RelieferToken.methods.mint(accounts[0], web3.utils.toWei("100", "ether")).send({ from: deployer });
+    await RelieferToken.methods.mint(RelieferFactory.options.address, web3.utils.toWei("100", "ether")).send({ from: deployer });
+
+
+    // check balance
+    const balance = await RelieferToken.methods.balanceOf(RelieferFactory.options.address).call();
+    console.log({ balance });
 
     const currentTimestampInSeconds = Math.round(Date.now() / 1000);
     const payload = {
@@ -69,6 +79,10 @@ describe("4. ", function () {
     const addressCampaign = (await RelieferFactory.methods.getCampaigns().call())[0];
 
     const RelieferCampaign = new web3.eth.Contract(attifactRelieferCampaign.abi, addressCampaign);
+
+     // test requestToken
+    // await RelieferFactory.methods.requestToken(web3.utils.toWei("1", "ether")).send({ from: accounts[0] });
+    // console.log("requestToken Done");
 
     return {
       RelieferToken: RelieferToken,
@@ -123,8 +137,8 @@ describe("4. ", function () {
       const userAddress = await MainRelieferCampaign.methods.get_allUsers().call();
       expect(userAddress[0]).to.be.equal(user);
       // expect(true).to.be.true;
-    } catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
       expect(true).to.be.false;
     }
   });
@@ -133,7 +147,7 @@ describe("4. ", function () {
     try {
       await MainRelieferCampaign.methods.user_joinCampaign().send({ from: accounts[4] });
       expect(true).to.be.false;
-    } catch(err) {
+    } catch (err) {
       expect(true).to.be.true;
     }
   });
@@ -174,7 +188,7 @@ describe("4. ", function () {
       await MainRelieferCampaign.methods.user_startCampaign().send({ from: user });
       // const getTime = await MainRelieferCampaign.methods.get_userStartTime(user).call();
       expect(true).to.be.true;
-    } catch(err) {
+    } catch (err) {
       expect(false).to.be.true;
     }
   });
@@ -194,10 +208,11 @@ describe("4. ", function () {
       await MainRelieferCampaign.methods.user_endCampaign().send({ from: user });
       const get_userStartTime = await MainRelieferCampaign.methods.get_userStartTime(user).call();
       const get_userEndTime = await MainRelieferCampaign.methods.get_userEndTime(user).call();
-      console.log("duration = " , get_userEndTime - get_userStartTime)
+      console.log("duration = ", get_userEndTime - get_userStartTime);
+      
       expect(true).to.be.true;
-    } catch(err) {
-      console.log(err)
+    } catch (err) {
+      // console.log(err);
       expect(false).to.be.true;
     }
   });
@@ -206,22 +221,40 @@ describe("4. ", function () {
     try {
       await MainRelieferCampaign.methods.calculateCampaign().send({ from: campaigner });
       const status = await MainRelieferCampaign.methods.status().call();
+      // const balance = await MainRelieferToken.methods.balanceOf(MainRelieferCampaign.options.address).call();
+      // console.log({ balance });
+      // expect(balance).to.be.equal(web3.utils.toWei("1", "gwei"));
       expect(status).to.be.equal("5");
-    } catch(err) {
+    } catch (err) {
+      console.log(err);
       expect(false).to.be.true;
     }
   });
 
-  it("4.12 SUCCESS phase - campaigner mint token to Campaign contract", async function () {
+  it("4.12 SUCCESS phase - campaigner transfer token to Campaign contract", async function () {
     try {
+
+      const balance = await MainRelieferToken.methods.balanceOf(MainRelieferCampaign.options.address).call();
       await MainRelieferCampaign.methods.mintReward().send({ from: campaigner });
-      
       const status = await MainRelieferCampaign.methods.status().call();
+      const balanceAfter = await MainRelieferToken.methods.balanceOf(MainRelieferCampaign.options.address).call();
+      console.log({ balance, balanceAfter });
+      expect(balanceAfter).to.be.equal(web3.utils.toWei("1", "gwei"));
       expect(status).to.be.equal("6");
-    } catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
       expect(false).to.be.true;
     }
   });
 
+  it("4.13 USER CLAIM TOKEN REWARD", async function () {
+    try {
+      await MainRelieferCampaign.methods.user_claim().send({ from: user });
+      const balance = await MainRelieferToken.methods.balanceOf(user).call();
+      expect(balance).to.be.equal(web3.utils.toWei("1", "gwei"));
+    } catch (err) {
+      console.log(err);
+      expect(false).to.be.true;
+    }
+  });
 });

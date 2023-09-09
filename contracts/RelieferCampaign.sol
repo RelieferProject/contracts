@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./RelieferValidate.sol";
 
 import "./RelieferToken.sol";
-import "./RelieferValidate.sol";
+import "./RelieferFactory.sol";
 
 enum STATUS_ENUM {NOTSTARTED,START_JOIN,END_JOIN, STARTED_CAMPAIGN, END_CAMPAIGN,SUCCESS,CLAIM}
 enum USER_STATUS_ENUM {NOT_JOIN,JOIN,STARTED_CAMPAIGN, END_CAMPAIGN,CLAIM,FALSE_RULE}
@@ -15,14 +15,16 @@ enum USER_STATUS_ENUM {NOT_JOIN,JOIN,STARTED_CAMPAIGN, END_CAMPAIGN,CLAIM,FALSE_
 
 contract RelieferCampaign is Ownable {
   RelieferValidate public validator;
+  RelieferFactory public factory;
 
-  constructor (address _owner,uint256 _startTime, uint256 _endTime, uint256 _durationToEarn, uint256 _rewardTokenAmount,uint256 _maxUser, RelieferToken _rewardToken, RelieferValidate _validator) {
+  constructor (address _owner,uint256 _startTime, uint256 _endTime, uint256 _durationToEarn, uint256 _rewardTokenAmount,uint256 _maxUser, RelieferToken _rewardToken, RelieferValidate _validator, RelieferFactory _factory) {
     startTime = _startTime;
     endTime = _endTime;
     durationToEarn = _durationToEarn;
     rewardTokenAmount = _rewardTokenAmount;
     rewardToken = _rewardToken;
     validator = _validator;
+    factory = _factory;
     maxUser = _maxUser;
     transferOwnership(_owner);
   }
@@ -113,13 +115,15 @@ contract RelieferCampaign is Ownable {
         userStatus[users[i]] = USER_STATUS_ENUM.FALSE_RULE;
       }
     }
+    // factory.requestToken(totalTokenAmount);
 
     status = STATUS_ENUM.SUCCESS;
   }
 
   function mintReward() external payable onlyOwner {
     require(status == STATUS_ENUM.SUCCESS, "not success");
-    rewardToken.transfer(msg.sender, totalTokenAmount);
+    // rewardToken.transfer(msg.sender, rewardTokenAmount);
+    factory.requestToken(totalTokenAmount);
     status = STATUS_ENUM.CLAIM;
   }
 

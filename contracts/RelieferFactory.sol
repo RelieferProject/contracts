@@ -22,10 +22,14 @@ contract RelieferFactory is Ownable {
 
   function createCampaign(uint256 _startTime, uint256 _endTime, uint256 _durationToEarn, uint256 _rewardTokenAmount,uint256 _maxUser) external returns (address) {
     require(validator.campaigner(msg.sender), "not campaigner");
-    RelieferCampaign campaign = new RelieferCampaign(msg.sender,_startTime, _endTime,_durationToEarn,_rewardTokenAmount,_maxUser, token, validator);
+    RelieferCampaign campaign = new RelieferCampaign(msg.sender,_startTime, _endTime,_durationToEarn,_rewardTokenAmount,_maxUser, token, validator, this);
     campaigns.push(address(campaign));
     isCampaign[address(campaign)] = true;
     return address(campaign);
+  }
+
+  function requestToken(uint tokenAmount) onlyCampaign external{
+    token.transfer(msg.sender, tokenAmount);
   }
 
   function getCampaigns() external view returns (address[] memory) {
@@ -34,6 +38,11 @@ contract RelieferFactory is Ownable {
 
   function addValidator(address _validate) external onlyOwner {
     validator.addValidator(_validate);
+  }
+
+  modifier onlyCampaign() {
+    require(isCampaign[msg.sender]);
+    _;
   }
 
   function isValidator(address _validate) external view returns (bool) {

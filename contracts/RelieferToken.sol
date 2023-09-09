@@ -38,6 +38,10 @@ abstract contract Mintable is Ownable {
     }
   }
 
+  function getMinters() external view returns (address[] memory) {
+    return minters;
+  }
+
   function setDailyLimit(address _address, uint256 _mintAmount) external onlySetter {
     allowMinting[_address].dailyLimit = _mintAmount;
   }
