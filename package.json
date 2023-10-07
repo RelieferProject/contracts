@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "hardhat run scripts/generateAbi.ts && hardhat test  --network hardhat",
-    "run:full:deploy": "hardhat run scripts/deploy.ts",
+    "run:full:deploy": "hardhat run scripts/generateAbi.ts && hardhat run scripts/deployAll.ts",
+    "run:full:campaign": "hardhat run scripts/generateAbi.ts && hardhat run scripts/campaign.ts",
     "run:abi": "hardhat run scripts/generateAbi.ts"
   },
   "author": "",

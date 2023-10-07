@@ -39,6 +39,7 @@ contract RelieferCampaign is Ownable {
     RelieferToken rewardToken;
     uint256 maxUser;
     address[] users;
+    address owner;
   }
 
   uint256 startTime;
@@ -56,6 +57,7 @@ contract RelieferCampaign is Ownable {
   mapping(address => USER_STATUS_ENUM) public userStatus;
   mapping(address => uint256) public userStartTime;
   mapping(address => uint256) public userEndTime;
+  // address public owner;
 
 
 
@@ -193,7 +195,8 @@ contract RelieferCampaign is Ownable {
       rewardTokenAmount: rewardTokenAmount,
       rewardToken: rewardToken,
       users: users,
-      maxUser: maxUser
+      maxUser: maxUser,
+      owner: owner()
     });
   }
 
@@ -245,5 +248,6 @@ interface IRelieferCampaign {
     RelieferToken rewardToken;
     address[] users;
     uint256 maxUser;
+    address owner;
   }
 }

@@ -1,6 +1,6 @@
 // deploy
 
-import { web3 } from "hardhat";
+import { ethers, web3 } from "hardhat";
 import { Artifact } from "hardhat/types";
 import { Contract } from "web3-eth-contract";
 

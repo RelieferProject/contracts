@@ -44,15 +44,15 @@ describe("4. Campaign Test", function () {
 
     // add minter to factory
     // await RelieferToken.methods.setAllowMint(RelieferFactory.options.address,true).send({ from: deployer });
-    await RelieferToken.methods.setAllowMint(deployer,true).send({ from: deployer });
-
+    await RelieferToken.methods.setAllowMint(deployer, true).send({ from: deployer });
 
     const getMinter = await RelieferToken.methods.getMinters().call();
     console.log({ getMinter });
 
     // mint token
-    await RelieferToken.methods.mint(RelieferFactory.options.address, web3.utils.toWei("100", "ether")).send({ from: deployer });
-
+    await RelieferToken.methods
+      .mint(RelieferFactory.options.address, web3.utils.toWei("100", "ether"))
+      .send({ from: deployer });
 
     // check balance
     const balance = await RelieferToken.methods.balanceOf(RelieferFactory.options.address).call();
@@ -80,7 +80,7 @@ describe("4. Campaign Test", function () {
 
     const RelieferCampaign = new web3.eth.Contract(attifactRelieferCampaign.abi, addressCampaign);
 
-     // test requestToken
+    // test requestToken
     // await RelieferFactory.methods.requestToken(web3.utils.toWei("1", "ether")).send({ from: accounts[0] });
     // console.log("requestToken Done");
 
@@ -209,7 +209,7 @@ describe("4. Campaign Test", function () {
       const get_userStartTime = await MainRelieferCampaign.methods.get_userStartTime(user).call();
       const get_userEndTime = await MainRelieferCampaign.methods.get_userEndTime(user).call();
       console.log("duration = ", get_userEndTime - get_userStartTime);
-      
+
       expect(true).to.be.true;
     } catch (err) {
       // console.log(err);
@@ -233,7 +233,6 @@ describe("4. Campaign Test", function () {
 
   it("4.12 SUCCESS phase - campaigner transfer token to Campaign contract", async function () {
     try {
-
       const balance = await MainRelieferToken.methods.balanceOf(MainRelieferCampaign.options.address).call();
       await MainRelieferCampaign.methods.mintReward().send({ from: campaigner });
       const status = await MainRelieferCampaign.methods.status().call();
@@ -249,9 +248,11 @@ describe("4. Campaign Test", function () {
 
   it("4.13 USER CLAIM TOKEN REWARD", async function () {
     try {
-      await MainRelieferCampaign.methods.user_claim().send({ from: user });
       const balance = await MainRelieferToken.methods.balanceOf(user).call();
-      expect(balance).to.be.equal(web3.utils.toWei("1", "gwei"));
+      await MainRelieferCampaign.methods.user_claim().send({ from: user });
+      const balanceAfter = await MainRelieferToken.methods.balanceOf(user).call();
+      console.log({ balance, balanceAfter });
+      expect(balanceAfter).to.be.equal(web3.utils.toWei("1", "gwei"));
     } catch (err) {
       console.log(err);
       expect(false).to.be.true;
