@@ -81,7 +81,7 @@ contract RelieferToken is ERC20, ERC20Burnable, Ownable, Mintable {
   constructor() ERC20("RelieferToken", "RLF") {}
 
   function mint(address _to, uint256 _amount) public onlyMinter {
-    increaseMint(_amount);
+    // increaseMint(_amount);
     _mint(_to, _amount);
   }
 

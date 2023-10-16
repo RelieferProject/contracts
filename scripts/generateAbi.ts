@@ -17,11 +17,13 @@ async function deploy() {
   const attifactRelieferToken = await artifacts.readArtifact("RelieferToken");
   const attifactRelieferCampaign = await artifacts.readArtifact("RelieferCampaign");
   const attifactRelieferFactory = await artifacts.readArtifact("RelieferFactory");
+  const attifactRelieferFaucet = await artifacts.readArtifact("RelieferFaucet");
 
   saveJson(attifactRelieferValidator.abi, "RelieferValidate");
   saveJson(attifactRelieferToken.abi, "RelieferToken");
   saveJson(attifactRelieferCampaign.abi, "RelieferCampaign");
   saveJson(attifactRelieferFactory.abi, "RelieferFactory");
+  saveJson(attifactRelieferFaucet.abi, "RelieferFaucet");
 }
 
 main();

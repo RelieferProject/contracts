@@ -28,8 +28,8 @@ contract RelieferFactory is Ownable {
     return address(campaign);
   }
 
-  function requestToken(uint tokenAmount) onlyCampaign external{
-    token.transfer(msg.sender, tokenAmount);
+  function requestToken(address _receive,uint tokenAmount) onlyCampaign external{
+    token.transfer(_receive, tokenAmount);
   }
 
   function getCampaigns() external view returns (address[] memory) {

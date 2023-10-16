@@ -9,6 +9,7 @@ async function deploy() {
   const attifactRelieferToken = await artifacts.readArtifact("RelieferToken");
   const attifactRelieferCampaign = await artifacts.readArtifact("RelieferCampaign");
   const attifactRelieferFactory = await artifacts.readArtifact("RelieferFactory");
+  const attifactRelieferFaucet = await artifacts.readArtifact("RelieferFaucet");
 
   const RelieferToken = await deployContract(attifactRelieferToken, deployer);
   const RelieferValidator = await deployContract(attifactRelieferValidator, deployer);
@@ -35,14 +36,26 @@ async function deploy() {
 
   // add minter to deployer and mintoken
   await RelieferToken.methods.setAllowMint(deployer, true).send({ from: deployer });
-  await RelieferToken.methods.mint(RelieferFactory.options.address, web3.utils.toWei("1000", "ether")).send({ from: deployer });
+  await RelieferToken.methods.setAllowMint(RelieferFactory.options.address, true).send({ from: deployer });
+  await RelieferToken.methods
+    .mint(RelieferFactory.options.address, web3.utils.toWei("1000000000", "ether"))
+    .send({ from: deployer });
 
+  await RelieferToken.methods
+    .mint(deployer, web3.utils.toWei("1000", "ether"))
+    .send({ from: deployer });
+
+  // add faucet
+  const RelieferFaucet = await deployContract(attifactRelieferFaucet, deployer, [
+    RelieferToken.options.address,
+    web3.utils.toWei("10", "ether"),
+    web3.utils.toWei("1", "ether"),
+  ]);
 
   console.log("RelieferValidator: ", RelieferValidator.options.address);
   console.log("RelieferToken: ", RelieferToken.options.address);
   console.log("RelieferFactory: ", RelieferFactory.options.address);
+  console.log("RelieferFaucet: ", RelieferFaucet.options.address);
 }
-
-
 
 deploy();

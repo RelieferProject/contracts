@@ -1,10 +1,12 @@
 import { artifacts, web3 } from "hardhat";
 
 const tokenAddres = {
-  Validator: "0xC159BB4552087c92C2fac9F80292c9A2988A2AF4",
-  Token: "0x4A681C52c07d51E614c7996053643039a3e54efA",
-  Factory: "0x77712CFBe9989D212f2f551c64c9261574EA2B98",
+  Validator: process.env.VITE_BASE_VALIDATOR_ADDRESS,
+  Token: process.env.VITE_BASE_TOKEN_ADDRESS,
+  Factory: process.env.VITE_BASE_FACTORY_ADDRESS,
 };
+
+console.log(tokenAddres);
 
 async function createCampaign() {
   let deployer: string;

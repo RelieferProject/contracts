@@ -9,7 +9,7 @@ import "./RelieferToken.sol";
 import "./RelieferFactory.sol";
 
 enum STATUS_ENUM {NOTSTARTED,START_JOIN,END_JOIN, STARTED_CAMPAIGN, END_CAMPAIGN,SUCCESS,CLAIM}
-enum USER_STATUS_ENUM {NOT_JOIN,JOIN,STARTED_CAMPAIGN, END_CAMPAIGN,CLAIM,FALSE_RULE}
+enum USER_STATUS_ENUM {NOT_JOIN,JOIN,STARTED_CAMPAIGN, END_CAMPAIGN,CLAIM,CLAIMED,FALSE_RULE}
 
 
 
@@ -125,7 +125,7 @@ contract RelieferCampaign is Ownable {
   function mintReward() external payable onlyOwner {
     require(status == STATUS_ENUM.SUCCESS, "not success");
     // rewardToken.transfer(msg.sender, rewardTokenAmount);
-    factory.requestToken(totalTokenAmount);
+    // factory.requestToken(totalTokenAmount);
     status = STATUS_ENUM.CLAIM;
   }
 
@@ -154,7 +154,9 @@ contract RelieferCampaign is Ownable {
   function user_claim() external onlyValidate {
     require(status == STATUS_ENUM.CLAIM, "not claim time");
     require(userStatus[msg.sender] == USER_STATUS_ENUM.CLAIM, "not claim");
-    rewardToken.transfer(msg.sender, rewardTokenAmount);
+    userStatus[msg.sender] = USER_STATUS_ENUM.CLAIMED;
+    factory.requestToken(msg.sender,rewardTokenAmount);
+    // rewardToken.transfer(msg.sender, rewardTokenAmount);
   }
 
   function get_allUsers() external view returns (address[] memory) {
