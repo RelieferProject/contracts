@@ -21,7 +21,7 @@ module.exports = {
     //   ],
     // },
     relieferchain: {
-      url: "http://157.230.242.107:8545",
+      url: "https://reliefer.site",
       chainId: 31337,
       accounts: [
         process.env.LOCAL_PRIVATE_KEY_1,
