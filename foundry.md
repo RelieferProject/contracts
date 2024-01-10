@@ -13,6 +13,8 @@ ufw enable
 ufw allow 8545
 ufw allow 22
 
+DOCKER_BUILDKIT=0 docker-compose up --build -d
+
 
 sudo adduser newuser
 sudo usermod -aG sudo newuser
