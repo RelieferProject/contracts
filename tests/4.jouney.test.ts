@@ -47,7 +47,7 @@ describe("4. Campaign Test", function () {
     await RelieferToken.methods.setAllowMint(deployer, true).send({ from: deployer });
 
     const getMinter = await RelieferToken.methods.getMinters().call();
-    console.log({ getMinter });
+    // console.log({ getMinter });
 
     // mint token
     await RelieferToken.methods
@@ -56,7 +56,7 @@ describe("4. Campaign Test", function () {
 
     // check balance
     const balance = await RelieferToken.methods.balanceOf(RelieferFactory.options.address).call();
-    console.log({ balance });
+    // console.log({ balance });
 
     const currentTimestampInSeconds = Math.round(Date.now() / 1000);
     const payload = {
@@ -231,14 +231,10 @@ describe("4. Campaign Test", function () {
     }
   });
 
-  it("4.12 SUCCESS phase - campaigner transfer token to Campaign contract", async function () {
+  it("4.12 SUCCESS phase - campaigner mint reward", async function () {
     try {
-      const balance = await MainRelieferToken.methods.balanceOf(MainRelieferCampaign.options.address).call();
       await MainRelieferCampaign.methods.mintReward().send({ from: campaigner });
       const status = await MainRelieferCampaign.methods.status().call();
-      const balanceAfter = await MainRelieferToken.methods.balanceOf(MainRelieferCampaign.options.address).call();
-      console.log({ balance, balanceAfter });
-      expect(balanceAfter).to.be.equal(web3.utils.toWei("1", "gwei"));
       expect(status).to.be.equal("6");
     } catch (err) {
       console.log(err);

@@ -55,14 +55,6 @@ module.exports = {
           balance: "10000000000000000000000",
         },
       ],
-      // accounts: {
-      //   mnemonic: "test test test test test test test test test test test junk",
-      //   path: "m/44'/60'/0'/0",
-      //   initialIndex: 0,
-      //   count: 20,
-      //   passphrase: "",
-      //   balance: "10000000000000000000000",
-      // },
     },
     testnet: {
       url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
