@@ -67,32 +67,32 @@ module.exports = {
         process.env.LOCAL_PRIVATE_KEY_4,
       ],
     },
-    kovan: {
-      url: "https://kovan.infura.io/v3/b01fa8a0141a4714a36b52d5676217ee",
-      accounts: [
-        process.env.LOCAL_PRIVATE_KEY_1,
-        process.env.LOCAL_PRIVATE_KEY_2,
-        process.env.LOCAL_PRIVATE_KEY_3,
-        process.env.LOCAL_PRIVATE_KEY_4,
-      ],
-    },
-    rinkeby: {
-      url: "https://rinkeby.infura.io/v3/b01fa8a0141a4714a36b52d5676217ee",
-      accounts: [
-        process.env.LOCAL_PRIVATE_KEY_1,
-        process.env.LOCAL_PRIVATE_KEY_2,
-        process.env.LOCAL_PRIVATE_KEY_3,
-        process.env.LOCAL_PRIVATE_KEY_4,
-      ],
-    },
-    mainnet: {
-      url: process.env.BSC_MAINNET_RPC,
-      accounts: [process.env.BSC_MAINNET_PRIVATE_KEY],
-    },
-    mainnetfork: {
-      url: "http://127.0.0.1:8545",
-      accounts: [process.env.BSC_MAINNET_PRIVATE_KEY],
-    },
+    // kovan: {
+    //   url: "https://kovan.infura.io/v3/b01fa8a0141a4714a36b52d5676217ee",
+    //   accounts: [
+    //     process.env.LOCAL_PRIVATE_KEY_1,
+    //     process.env.LOCAL_PRIVATE_KEY_2,
+    //     process.env.LOCAL_PRIVATE_KEY_3,
+    //     process.env.LOCAL_PRIVATE_KEY_4,
+    //   ],
+    // },
+    // rinkeby: {
+    //   url: "https://rinkeby.infura.io/v3/b01fa8a0141a4714a36b52d5676217ee",
+    //   accounts: [
+    //     process.env.LOCAL_PRIVATE_KEY_1,
+    //     process.env.LOCAL_PRIVATE_KEY_2,
+    //     process.env.LOCAL_PRIVATE_KEY_3,
+    //     process.env.LOCAL_PRIVATE_KEY_4,
+    //   ],
+    // },
+    // mainnet: {
+    //   url: process.env.BSC_MAINNET_RPC,
+    //   accounts: [process.env.BSC_MAINNET_PRIVATE_KEY],
+    // },
+    // mainnetfork: {
+    //   url: "http://127.0.0.1:8545",
+    //   accounts: [process.env.BSC_MAINNET_PRIVATE_KEY],
+    // },
   },
   namedAccounts: {
     deployer: {
