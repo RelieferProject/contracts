@@ -46,16 +46,16 @@ async function deploy() {
     .send({ from: deployer });
 
   // add faucet
-  const RelieferFaucet = await deployContract(attifactRelieferFaucet, deployer, [
-    RelieferToken.options.address,
-    web3.utils.toWei("10", "ether"),
-    web3.utils.toWei("1", "ether"),
-  ]);
+  // const RelieferFaucet = await deployContract(attifactRelieferFaucet, deployer, [
+  //   RelieferToken.options.address,
+  //   web3.utils.toWei("10", "ether"),
+  //   web3.utils.toWei("1", "ether"),
+  // ]);
 
   console.log("RelieferValidator: ", RelieferValidator.options.address);
   console.log("RelieferToken: ", RelieferToken.options.address);
   console.log("RelieferFactory: ", RelieferFactory.options.address);
-  console.log("RelieferFaucet: ", RelieferFaucet.options.address);
+  // console.log("RelieferFaucet: ", RelieferFaucet.options.address);
 }
 
 deploy();
